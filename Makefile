@@ -1,27 +1,20 @@
 CC = gcc
-CFLAGS = -std=c11 -O2 -Wall -Wextra -Werror -pedantic
-CORE = gb_cpu.c gb_bus.c gb_ppu.c
+CFLAGS = -std=c11 -O2 -Wall -Wextra -Werror -pedantic -I.
+CORE = src/gb_cpu.c src/gb_bus.c src/gb_ppu.c
 
-all: gbemu.exe gbplay.exe demo.gb
+all: main.exe gbplay.exe
 
-gbemu.exe: gbemu.c $(CORE) gb.h
-	$(CC) $(CFLAGS) gbemu.c $(CORE) -o $@
+main.exe: src/main.c $(CORE) gb.h
+	$(CC) $(CFLAGS) src/main.c $(CORE) -o $@
 
-gbplay.exe: gb_win32.c $(CORE) gb.h
-	$(CC) $(CFLAGS) gb_win32.c $(CORE) -o $@ -lgdi32 -luser32
+gbplay.exe: src/gb_win32.c $(CORE) gb.h
+	$(CC) $(CFLAGS) src/gb_win32.c $(CORE) -o $@ -lgdi32 -luser32
 
-selftest.exe: selftest.c $(CORE) gb.h
-	$(CC) $(CFLAGS) selftest.c $(CORE) -o $@
+selftest.exe: tests/selftest.c $(CORE) gb.h
+	$(CC) $(CFLAGS) tests/selftest.c $(CORE) -o $@
 
-demo_rom.exe: demo_rom.c
-	$(CC) $(CFLAGS) demo_rom.c -o $@
-
-demo.gb: demo_rom.exe
-	./demo_rom.exe demo.gb
-
-playtest.exe: playtest.c $(CORE) gb.h
-	$(CC) $(CFLAGS) playtest.c $(CORE) -o $@
-
-test: selftest.exe demo.gb playtest.exe
+test: selftest.exe
 	./selftest.exe
-	./playtest.exe
+
+play: gbplay.exe
+	./gbplay.exe "Wario Land_ Super Mario Land 3/Wario Land - Super Mario Land 3 (World).gb"

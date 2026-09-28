@@ -3,8 +3,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-static bool prepare_demo(GameBoy *gb)
-{
+static bool prepare_demo(GameBoy *gb){
+
     static const uint8_t program[] = {
         0x31, 0xFE, 0xFF,       /* LD SP,FFFE */
         0x21, 0x23, 0xC1,       /* LD HL,C123 */
